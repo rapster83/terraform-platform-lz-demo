@@ -6,7 +6,7 @@ state_backend = {
 }
 
 subscription_id        = "70f0d042-bb3d-490b-8498-964903cd415a"
-name                   = "meter-readings" # Name of the application landing zone (.sh file)
+name                   = "meter-readings" # Name of the application landing zone (Normally over the .sh file)
 address_space          = ["10.100.16.0/24"]
 github_repository      = "rapster83/terraform-application-lz-demo"
 github_oidc_repository = "rapster83@33814851/terraform-application-lz-demo@1434962579"

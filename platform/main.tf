@@ -2,11 +2,6 @@
 # The modules come straight from the open-source Airstrip repository, pinned to a
 # commit. This repository only holds configuration.
 
-import {
-  to = module.foundation.azurerm_management_group.root
-  id = "/providers/Microsoft.Management/managementGroups/${var.root_id}"
-}
-
 module "foundation" {
   source = "github.com/rapster83/terraform-modules-lz-demo//terraform/modules/foundation?ref=v0.0.3"
 
