@@ -2,14 +2,6 @@
 # Root ID, subscription and logging workspace come from the platform state, so
 # platform/terraform.tfvars stays the single place for them.
 
-data "terraform_remote_state" "platform" {
-  backend = "azurerm"
-  config  = merge(var.state_backend, { key = "management-groups.tfstate", use_azuread_auth = true })
-}
-
-locals {
-  platform = data.terraform_remote_state.platform.outputs
-}
 
 module "connectivity" {
   source = "github.com/rapster83/terraform-modules-lz-demo//terraform/modules/connectivity?ref=v0.0.3"
