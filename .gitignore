@@ -11,8 +11,11 @@ plan-summary.md
 crash.log
 crash.*.log
 *_override.tf
+backend.conf
+.terraform.lock.hcl
+*.lock.hcl
 
 # Bootstrap runs locally and keeps its own state and settings
-bootstrap/terraform.tfvars
+bootstrap/default.auto.tfvars
 
 .DS_Store

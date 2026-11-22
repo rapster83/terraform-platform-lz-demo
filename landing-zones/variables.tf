@@ -1,5 +1,4 @@
 # --- Set in landing-zones/<name>.tfvars, one file per application --------------
-
 variable "subscription_id" {
   description = "The application's subscription. Create it by hand and add it to platform/terraform.tfvars."
   type        = string
@@ -51,7 +50,7 @@ variable "github_oidc_repository" {
 
 variable "location" {
   type    = string
-  default = "westeurope"
+  default = "swedencentral"
 }
 
 variable "other_spoke_prefixes" {
@@ -80,8 +79,9 @@ variable "assignable_roles" {
   ]
 }
 
-# --- Set by scripts/platform.sh -------------------------------------------------
 
+
+# --- Set by scripts/platform.sh -------------------------------------------------
 variable "name" {
   description = "The landing zone's name. scripts/platform.sh passes the file name, e.g. meter-readings."
   type        = string

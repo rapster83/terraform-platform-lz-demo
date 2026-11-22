@@ -8,7 +8,7 @@ import {
 }
 
 module "foundation" {
-  source = "github.com/rappster83/terraform-modules-lz-demo//terraform/modules/foundation?ref=ee735616c07ad179c7d9d2a61c493a62a6407976"
+  source = "github.com/rapster83/terraform-modules-lz-demo//terraform/modules/foundation?ref=v0.0.3"
 
   stage              = "regional_airfield"
   root_id            = var.root_id
@@ -22,7 +22,7 @@ module "foundation" {
 }
 
 module "governance" {
-  source = "github.com/rappster83/terraform-modules-lz-demo//terraform/modules/governance?ref=ee735616c07ad179c7d9d2a61c493a62a6407976"
+  source = "github.com/rapster83/terraform-modules-lz-demo//terraform/modules/governance?ref=v0.0.3"
 
   stage                            = "regional_airfield"
   landingzones_management_group_id = module.foundation.management_group_ids.landingzones

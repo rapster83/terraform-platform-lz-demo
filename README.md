@@ -1,6 +1,6 @@
-# Kestrel Energy platform
+# example Energy platform
 
-The Azure landing zone of Kestrel Energy (a fictional company from the talk **"Azure Landing Zones Without the Overwhelm"**). It is level 2 of [Airstrip](https://github.com/rappster83/terraform-modules-lz-demo), the *Regional airfield*: management groups, guardrail policies, central logging, a hub with Azure Firewall and private DNS, and one spoke per application.
+The Azure landing zone of example Energy (a fictional company from the talk **"Azure Landing Zones Without the Overwhelm"**). It is level 2 of [Airstrip](https://github.com/rapster83/terraform-modules-lz-demo), the *Regional airfield*: management groups, guardrail policies, central logging, a hub with Azure Firewall and private DNS, and one spoke per application.
 
 This repository holds **configuration only**. The Terraform modules come from Airstrip, pinned to a commit.
 
@@ -32,7 +32,7 @@ subscriptions = {
 ```hcl
 subscription_id   = "<your-subscription-id>"
 address_space     = ["10.100.16.0/24"]
-github_repository = "rappster83/meter-readings-api"
+github_repository = "rapster83/meter-readings-api"
 
 tags = {
   owner         = "meter-team"
@@ -60,7 +60,7 @@ The landing zone's contract with the app's Terraform is the GitHub variable `LAN
 {
   "name": "meter-readings",
   "subscription_id": "…",
-  "location": "westeurope",
+  "location": "swedencentral",
   "tags": { "owner": "meter-team", "cost-center": "cc-4711", "env": "prod" },
   "vnet_id": "…",
   "subnet_ids": { "apps": "…", "private-endpoints": "…" },
@@ -75,7 +75,7 @@ App repositories call the platform's pipeline template and write nothing else:
 ```yaml
 jobs:
   app:
-    uses: rappster83/kestrel-platform/.github/workflows/app-dotnet.yml@v1
+    uses: rapster83/example-platform/.github/workflows/app-dotnet.yml@v1
     with:
       app-name: meter-readings-api
     permissions:
@@ -83,7 +83,7 @@ jobs:
       contents: read
 ```
 
-It builds and tests, applies the app's Terraform in `infra/` into the landing zone, pushes the container image, deploys to App Service and waits until the new commit answers. Example: [meter-readings-api](https://github.com/rappster83/meter-readings-api).
+It builds and tests, applies the app's Terraform in `infra/` into the landing zone, pushes the container image, deploys to App Service and waits until the new commit answers. Example: [meter-readings-api](https://github.com/rapster83/meter-readings-api).
 
 ## Layout
 
@@ -119,13 +119,13 @@ Each landing zone `/24`: `.0/26` apps, `.64/27` private endpoints.
 
 ## One-time setup
 
-1. Create the platform root management group (ID `kestrel` by default). Create the management, connectivity and app subscriptions; register their resource providers with `scripts/register-providers.sh`. Move these subscriptions under the platform root before running the pipelines, so they inherit the pipeline roles. The move requires permissions on the subscription and the relevant parent groups; rights on `kestrel` alone are not sufficient. No permissions on the tenant root are needed when it is the source parent.
+1. Create the platform root management group (ID `example` by default). Create the management, connectivity and app subscriptions; register their resource providers with `scripts/register-providers.sh`. Move these subscriptions under the platform root before running the pipelines, so they inherit the pipeline roles. The move requires permissions on the subscription and the relevant parent groups; rights on `example` alone are not sufficient. No permissions on the tenant root are needed when it is the source parent.
 2. `bootstrap/`: `terraform init && terraform apply` with a user who may assign roles on the platform root and manage resources and role assignments in the management subscription. Run the printed `gh` commands. Pipeline Reader/Owner roles are scoped to the platform root, not the tenant root.
 3. Create a fine-grained GitHub token for the app repositories (Administration and Environments: read and write) and store it as `LZ_GITHUB_TOKEN`.
 4. Fill in the subscription IDs in `platform/terraform.tfvars` and push to `main`. The first plan imports the existing platform root management group via the `import` block in `platform/main.tf`; review the plan before applying, including any display-name change. The first apply records the import and builds the platform and the hub (about 20 minutes, mostly the firewall).
 5. Tag the golden pipeline: `git tag v1 && git push origin v1`.
 
-Use the same `root_id` in `bootstrap/terraform.tfvars` and `platform/terraform.tfvars` (for example, `kestrel`). It is a technical identifier used in Azure resource names, not a display name; do not include spaces. Set the human-readable name separately with `root_display_name` in `platform/terraform.tfvars`.
+Use the same `root_id` in `bootstrap/terraform.tfvars` and `platform/terraform.tfvars` (for example, `example`). It is a technical identifier used in Azure resource names, not a display name; do not include spaces. Set the human-readable name separately with `root_display_name` in `platform/terraform.tfvars`.
 
 If GitHub issues an OIDC subject containing numeric IDs, such as `repo:owner@123/repository@456:environment:platform-apply`, set `github_oidc_repository = "owner@123/repository@456"` in `bootstrap/terraform.tfvars` and rerun the bootstrap apply. This updates both pipeline federated credentials. Keep `github_repository` as the ordinary `owner/repository` name for GitHub CLI commands. Azure requires an exact subject match; use the repository portion shown in the authentication error rather than guessing IDs.
 

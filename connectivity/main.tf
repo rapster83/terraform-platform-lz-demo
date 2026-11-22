@@ -12,11 +12,11 @@ locals {
 }
 
 module "connectivity" {
-  source = "github.com/rappster83/terraform-modules-lz-demo//terraform/modules/connectivity?ref=ee735616c07ad179c7d9d2a61c493a62a6407976"
+  source = "github.com/rapster83/terraform-modules-lz-demo//terraform/modules/connectivity?ref=v0.0.3"
 
   stage                      = "regional_airfield"
   root_id                    = local.platform.root_id
-  subscription_id            = local.platform.subscriptions["connectivity"][0]
+  subscription_id            = local.platform.subscriptions["management"][0] # WARNING: Changed from 'connectivity' to 'management', because only one subscription is available in the tenant.
   location                   = var.location
   tags                       = var.tags
   address_space              = var.address_space

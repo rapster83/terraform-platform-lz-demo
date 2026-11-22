@@ -20,10 +20,11 @@ variable "subscriptions" {
   description = "Which subscription goes into which management group (management, connectivity, corp, online or <corp|online>-<workload>)."
   type        = map(list(string))
 
-  validation {
-    condition     = contains(keys(var.subscriptions), "management") && contains(keys(var.subscriptions), "connectivity")
-    error_message = "subscriptions needs a management and a connectivity subscription."
-  }
+  # WARNING: Currently only one subscription is available in the tenant.
+  # validation {
+  #   condition     = contains(keys(var.subscriptions), "management") && contains(keys(var.subscriptions), "connectivity")
+  #   error_message = "subscriptions needs a management and a connectivity subscription."
+  # }
 
   validation {
     condition = alltrue([
@@ -40,7 +41,7 @@ variable "allowed_locations" {
 
 variable "logging_location" {
   type    = string
-  default = "westeurope"
+  default = "swedencentral"
 }
 
 variable "log_retention_days" {

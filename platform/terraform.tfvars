@@ -1,11 +1,11 @@
-root_id           = "kestrel"
-root_display_name = "Kestrel Energy"
-allowed_locations = ["westeurope", "germanywestcentral"]
-logging_location  = "westeurope"
+root_id           = "ddc"
+root_display_name = "DDC"
+allowed_locations = ["swedencentral", "germanywestcentral"]
+logging_location  = "swedencentral"
 
 # One management group per application, below Corp or Online.
 workloads = {
-  corp   = {}
+  corp = {}
   online = {
     meter-readings = "Meter Readings"
   }
@@ -13,9 +13,11 @@ workloads = {
 
 # Subscriptions are created by hand. Placing one here moves it into its management group.
 subscriptions = {
-  management   = ["cae14dc7-cfdc-49e7-868f-f054c31a9c6e"]
-  connectivity = ["dfc79d96-ec2d-4f98-a8b1-b553e7c06376"]
-  online-meter-readings = ["134d7b9d-5fe3-4754-b9d6-245b73c8eb0b"]
+  management = ["70f0d042-bb3d-490b-8498-964903cd415a"]
+
+  # WARNING: Only one subscription is available in the tenant, so connectivity uses the management subscription.
+  #connectivity          = ["70f0d042-bb3d-490b-8498-964903cd415a"]
+  #online-meter-readings = ["70f0d042-bb3d-490b-8498-964903cd415a"]
 }
 
 # Approved, expiring exceptions from Corp "No public endpoints".

@@ -7,33 +7,7 @@
 #
 # State of this root stays local (terraform.tfstate here, git-ignored). Keep it safe.
 
-terraform {
-  required_version = ">= 1.7"
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 4.0"
-    }
-  }
-}
 
-provider "azurerm" {
-  features {
-    storage {
-      data_plane_available = false # shared keys are off; manage the account through ARM only
-    }
-  }
-  subscription_id                 = var.management_subscription_id
-  resource_provider_registrations = "none"
-  storage_use_azuread             = true
-}
-
-data "azurerm_client_config" "current" {}
-
-locals {
-  platform_root_scope = "/providers/Microsoft.Management/managementGroups/${var.root_id}"
-  state_container     = "${azurerm_storage_account.state.id}/blobServices/default/containers/${azurerm_storage_container.state.name}"
-}
 
 # ---------------------------------------------------------------------------
 # Terraform state
@@ -77,6 +51,8 @@ resource "azurerm_role_assignment" "you_state" {
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
+
+
 # ---------------------------------------------------------------------------
 # Pipeline identities for the platform repository
 # ---------------------------------------------------------------------------
@@ -100,19 +76,6 @@ resource "azurerm_federated_identity_credential" "github" {
   audience                  = ["api://AzureADTokenExchange"]
   issuer                    = "https://token.actions.githubusercontent.com"
   subject                   = "repo:${coalesce(var.github_oidc_repository, var.github_repository)}:environment:platform-${each.key}"
-}
-
-locals {
-  pipeline_roles = {
-    # Plans see everything and change nothing in Azure. They do need to write to the
-    # state container: for a brand-new landing zone the backend creates an empty state file.
-    plan-reader = { identity = "plan", scope = local.platform_root_scope, role = "Reader" }
-    plan-state  = { identity = "plan", scope = local.state_container, role = "Storage Blob Data Contributor" }
-    # Applies build management groups, policies, networks and new landing zones.
-    # Demo shortcut: Owner on the platform root. Production: split into narrower roles.
-    apply-owner = { identity = "apply", scope = local.platform_root_scope, role = "Owner" }
-    apply-state = { identity = "apply", scope = local.state_container, role = "Storage Blob Data Contributor" }
-  }
 }
 
 resource "azurerm_role_assignment" "pipeline" {

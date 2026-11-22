@@ -4,7 +4,7 @@ variable "management_subscription_id" {
 }
 
 variable "github_repository" {
-  description = "owner/repo of this platform repository, e.g. rappster83/kestrel-platform."
+  description = "owner/repo of this platform repository, e.g. rapster83/example-platform."
   type        = string
 }
 
@@ -27,10 +27,10 @@ variable "state_storage_account_name" {
 variable "root_id" {
   description = "ID of the existing platform root management group. Same root_id as in platform/terraform.tfvars."
   type        = string
-  default     = "kestrel"
+  default     = "example"
 }
 
 variable "location" {
   type    = string
-  default = "westeurope"
+  default = "swedencentral"
 }
