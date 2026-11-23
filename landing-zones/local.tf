@@ -58,7 +58,7 @@ locals {
   assignable_role_ids = join(", ", [for r in data.azurerm_role_definition.assignable : basename(r.role_definition_id)])
 
   # ---------------------------------------------------------------------------
-  # The contract the application's Terraform receives (GitHub variable LANDING_ZONE)
+  # The CONTRACT the application's Terraform receives (GitHub variable LANDING_ZONE)
   # ---------------------------------------------------------------------------
   landing_zone = {
     name                 = var.name
